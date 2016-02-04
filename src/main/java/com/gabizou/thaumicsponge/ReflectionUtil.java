@@ -22,10 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.interfaces;
+package com.gabizou.thaumicsponge;
 
-public interface IMixinNodeType {
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
-    void setNodeTypeId(String name);
+public class ReflectionUtil {
+
+    public static void setStaticFinalField(Field field, Object value) throws ReflectiveOperationException {
+        field.setAccessible(true);
+
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+        field.set(null, value);
+    }
 
 }

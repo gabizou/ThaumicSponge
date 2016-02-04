@@ -20,6 +20,8 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.0'
         classpath 'org.spongepowered:mixingradle:0.2-SNAPSHOT'
         classpath 'org.spongepowered:spongegradle:0.3-SNAPSHOT'
@@ -30,6 +32,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.hierynomus.license'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.spongepowered.gradle'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 defaultTasks 'clean', 'licenseFormat', 'sortAccessTransformers', 'build'
 
@@ -92,6 +95,7 @@ sourceSets {
     main { output.resourcesDir = output.classesDir }
 }
 
+
 license {
     ext.name = project.name
     ext.url = project.url
@@ -124,7 +128,19 @@ jar {
                 'Implementation-Title': project.name,
                 'Implementation-Version': version,
                 'Implementation-Vendor': url,
-                'FMLAT': 'thaumcraft_sponge_at.cfg'
+                'FMLAT': 'thaumicsponge_at.cfg'
         )
+    }
+}
+
+shadowJar {
+
+    dependencies {
+        // SpongeCommon and Mixin
+        include project('ThaumicSpongeAPI')
+        exclude dependency('org.spongepowered:mixin')
+        exclude dependency('org.spongepowered:spongeapi')
+        exclude dependency('org.spongepowered:spongeforge')
+        exclude dependency('47135879:Thaumcraft')
     }
 }

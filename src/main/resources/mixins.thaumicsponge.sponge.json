@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.4.12",
+    "package": "com.gabizou.thaumicsponge.mixin.sponge",
+    "priority": 1111,
+    "mixins": [
+        "MixinCommonModuleRegistry"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

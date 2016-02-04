@@ -22,10 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.interfaces;
+package com.gabizou.thaumicsponge.mixin.core.entity;
 
-public interface IMixinNodeType {
+import com.gabizou.thaumicsponge.api.entity.EldritchMonster;
+import org.spongepowered.asm.mixin.Mixin;
+import thaumcraft.api.entities.IEldritchMob;
 
-    void setNodeTypeId(String name);
+@Mixin(IEldritchMob.class)
+public interface MixinIEldritchMob extends EldritchMonster {
 
 }

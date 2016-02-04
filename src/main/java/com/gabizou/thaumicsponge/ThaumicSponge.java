@@ -22,10 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.interfaces;
+package com.gabizou.thaumicsponge;
 
-public interface IMixinNodeType {
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.plugin.Plugin;
 
-    void setNodeTypeId(String name);
+@Plugin(id = "thaumicsponge", name = "ThaumicSponge", version = "0.0.1-SNAPSHOT")
+public class ThaumicSponge {
+
+
+    @Listener
+    public void onInit(GamePreInitializationEvent event) {
+        System.err.printf("Staring up ThaumicSponge!\n");
+    }
+
 
 }

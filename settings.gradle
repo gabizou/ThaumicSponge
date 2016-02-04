@@ -16,5 +16,5 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'Thaumcraft'
+rootProject.name = 'ThaumicSponge'
 include 'ThaumicSpongeAPI'

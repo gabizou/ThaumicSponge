@@ -22,10 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.interfaces;
+package com.gabizou.thaumicsponge.mixin.core.entity;
 
-public interface IMixinNodeType {
+import com.gabizou.thaumicsponge.api.entity.Tainted;
+import org.spongepowered.asm.mixin.Mixin;
+import thaumcraft.api.entities.ITaintedMob;
 
-    void setNodeTypeId(String name);
+@Mixin(ITaintedMob.class)
+public interface MixinITaintedMob extends Tainted {
 
 }

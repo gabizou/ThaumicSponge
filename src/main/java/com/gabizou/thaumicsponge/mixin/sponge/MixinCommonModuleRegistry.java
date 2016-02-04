@@ -22,10 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.interfaces;
+package com.gabizou.thaumicsponge.mixin.sponge;
 
-public interface IMixinNodeType {
+import com.gabizou.thaumicsponge.api.Aspect;
+import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
+import com.gabizou.thaumicsponge.registry.AspectRegistryModule;
+import com.gabizou.thaumicsponge.registry.NodeTypeRegistryModule;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.common.SpongeImpl;
+import org.spongepowered.common.registry.CommonModuleRegistry;
+import org.spongepowered.common.registry.SpongeGameRegistry;
 
-    void setNodeTypeId(String name);
+@Mixin(value = CommonModuleRegistry.class, remap = false)
+public abstract class MixinCommonModuleRegistry {
+
+    @Inject(method = "registerDefaultModules", at = @At("RETURN"))
+    private void onRegister(CallbackInfo callbackInfo) {
+        SpongeGameRegistry registry = SpongeImpl.getRegistry();
+
+        registry.registerModule(AuraNodeType.class, new NodeTypeRegistryModule())
+                .registerModule(Aspect.class, AspectRegistryModule.getInstance());
+    }
+
 
 }

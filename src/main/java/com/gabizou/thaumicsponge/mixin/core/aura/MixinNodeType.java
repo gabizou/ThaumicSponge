@@ -22,10 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.interfaces;
+package com.gabizou.thaumicsponge.mixin.core.aura;
 
-public interface IMixinNodeType {
+import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
+import com.gabizou.thaumicsponge.interfaces.IMixinNodeType;
+import org.spongepowered.asm.mixin.Mixin;
+import thaumcraft.common.lib.aura.NodeType;
 
-    void setNodeTypeId(String name);
+@Mixin(NodeType.class)
+public abstract class MixinNodeType implements AuraNodeType, IMixinNodeType {
 
+    private String nodeType;
+
+    @Override
+    public String getId() {
+        return this.nodeType;
+    }
+
+    @Override
+    public String getName() {
+        return this.nodeType;
+    }
+
+    @Override
+    public void setNodeTypeId(String name) {
+        this.nodeType = name;
+    }
 }

@@ -1,14 +1,14 @@
 {
     "required": true,
     "minVersion": "0.4.12",
-    "package": "com.gabizou.thaumicsponge.mixin",
+    "package": "com.gabizou.thaumicsponge.mixin.core",
     "refmap": "mixins.forge.refmap.json",
     "priority": 1111,
     "mixins": [
         "aspect.MixinAspect",
+        "aura.MixinNodeType",
         "entity.MixinIEldritchMob",
-        "entity.MixinITaintedMob",
-        "lib.aura.MixinNodeType"
+        "entity.MixinITaintedMob"
     ],
     "injectors": {
         "defaultRequire": 1
