@@ -12,7 +12,7 @@ import java.util.Map;
 @IFMLLoadingPlugin.MCVersion("1.8.9")
 public class ThaumicSpongeCoreMod implements IFMLLoadingPlugin {
 
-    private File modFile;
+    static File modFile;
 
     public ThaumicSpongeCoreMod() {
         // Let's get this party started
@@ -43,9 +43,9 @@ public class ThaumicSpongeCoreMod implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        this.modFile = (File) data.get("coremodLocation");
-        if (this.modFile == null) {
-            this.modFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        modFile = (File) data.get("coremodLocation");
+        if (modFile == null) {
+            modFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         }
     }
 

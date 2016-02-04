@@ -79,12 +79,12 @@ minecraft {
 
 
 dependencies {
-    compile "org.spongepowered:spongeapi:3.1.0-SNAPSHOT"
+    compile project('ThaumicSpongeAPI')
     compile('org.spongepowered:mixin:0.4.16-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
-    compile "org.spongepowered:spongeforge:1.8.9 - 3.1.0-BETA-1137"
+    compile "org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev"
     compile "47135879:Thaumcraft:1.8.9-5.1.6:deobf"
 }
 
