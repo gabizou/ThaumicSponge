@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "thaumicsponge",
+        "name": "ThaumicSponge",
+        "description": "The Sponge API Compatibility Module for Thaumcraft",
+        "version": "$version",
+        "credits": "Copyright (C) Gabriel Harris-Rouquette and contributors",
+        "logoFile": "/com/gabizou/thaumicsponge/launch/gui/thaumicsponge_logo.png",
+        "mcversion": "$minecraftVersion",
+        "url": "$url",
+        "updateUrl": "",
+        "authors": [ "gabizou" ],
+        "parent":"",
+        "screenshots": [],
+        "dependencies": []
+    }
+]

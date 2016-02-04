@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.4.12",
+    "package": "org.spongepowered.mod.mixin.core",
+    "refmap": "mixins.forge.refmap.json",
+    "priority": 1111,
+    "mixins": [
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

@@ -1,0 +1,3 @@
+[submodule "ThaumicSpongeAPI"]
+	path = ThaumicSpongeAPI
+	url = git@github.com:gabizou/ThaumicSpongeAPI.git
