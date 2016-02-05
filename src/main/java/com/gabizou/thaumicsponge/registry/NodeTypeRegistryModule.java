@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gabizou.thaumicsponge.ReflectionUtil;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeTypes;
-import com.gabizou.thaumicsponge.interfaces.IMixinNodeType;
+import com.gabizou.thaumicsponge.mixin.interfaces.IMixinNodeType;
 import com.google.common.collect.ImmutableSet;
 import org.spongepowered.api.registry.CatalogRegistryModule;
 import org.spongepowered.api.registry.util.CustomCatalogRegistration;
@@ -66,22 +66,6 @@ public class NodeTypeRegistryModule implements CatalogRegistryModule<AuraNodeTyp
         registerNode(NodeType.nodeTypes[4], "taint");
         registerNode(NodeType.nodeTypes[5], "unstable");
         registerNode(NodeType.nodeTypes[6], "astral");
-    }
-
-
-    @CustomCatalogRegistration
-    public void registerCatalog() {
-        for (Field field : AuraNodeTypes.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                AuraNodeType aspect = this.nodeTypeMap.get(field.getName().toLowerCase());
-                if (aspect != null) {
-                    ReflectionUtil.setStaticFinalField(field, aspect);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void registerNode(NodeType nodeType, String id) {

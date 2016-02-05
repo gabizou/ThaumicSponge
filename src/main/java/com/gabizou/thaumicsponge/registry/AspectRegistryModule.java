@@ -86,22 +86,6 @@ public class AspectRegistryModule implements SpongeAdditionalCatalogRegistryModu
         }
     }
 
-    @CustomCatalogRegistration
-    public void registerCatalog() {
-        thaumcraft.api.aspects.Aspect dummyForclassloading = thaumcraft.api.aspects.Aspect.AIR;
-        for (Field field : Aspects.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                Aspect aspect = this.aspectMap.get(field.getName().toLowerCase());
-                if (aspect != null) {
-                    ReflectionUtil.setStaticFinalField(field, aspect);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private static final class Holder {
         static final AspectRegistryModule INSTANCE = new AspectRegistryModule();
     }

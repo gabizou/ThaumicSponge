@@ -42,6 +42,21 @@ targetCompatibility = '1.8'
 archivesBaseName = project.name.toLowerCase()
 version = "${project.minecraftVersion}-${project.forgeVersion}-r${project.apiVersion.split("-")[0]}"
 
+
+sourceSets {
+    main {
+        refMap = "mixins.${project.name.toLowerCase()}.refmap.json"
+    }
+}
+
+minecraft {
+    forgeVersion = project.forgeVersion
+    runDir = 'run'
+    mappings = project.mcpMappings
+    makeObfSourceJar = false
+}
+
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -67,34 +82,22 @@ repositories {
     }
 }
 
-sourceSets {
-    main {
-        refMap = "mixins.${project.name.toLowerCase()}.refmap.json"
-    }
-}
-
-minecraft {
-    forgeVersion = project.forgeVersion
-    runDir = 'run'
-    mappings = project.mcpMappings
-    makeObfSourceJar = false
-}
-
-
 dependencies {
     compile project('ThaumicSpongeAPI')
     compile('org.spongepowered:mixin:0.4.16-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
+    compile 'org.spongepowered:spongeapi:3.1.0-SNAPSHOT'
     compile "org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev"
     compile "47135879:Thaumcraft:1.8.9-5.1.6:deobf"
 }
 
-sourceSets {
-    main { output.resourcesDir = output.classesDir }
+idea {
+    module {
+        inheritOutputDirs = true
+    }
 }
-
 
 license {
     ext.name = project.name
@@ -104,6 +107,13 @@ license {
     strictCheck true
     include '**/*.java'
 }
+
+shadowJar {
+    dependencies {
+        include project(":ThaumicSpongeAPI")
+    }
+}
+
 
 // ForgeGradle 2 fails to apply transformer rules for classes it doesn't know of by default
 // We use the access transformer to make the catalogs in the API accessible
@@ -138,9 +148,3 @@ jar {
     }
 }
 
-shadowJar {
-    duplicatesStrategy= 'EXCLUDE'
-    dependencies {
-        include project('ThaumicSpongeAPI')
-    }
-}

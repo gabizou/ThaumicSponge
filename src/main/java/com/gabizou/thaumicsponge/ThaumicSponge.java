@@ -24,9 +24,22 @@
  */
 package com.gabizou.thaumicsponge;
 
+import com.gabizou.thaumicsponge.api.data.ThaumicKeys;
+import com.gabizou.thaumicsponge.api.data.manipulator.immutable.ImmutableAuraNodeData;
+import com.gabizou.thaumicsponge.api.data.manipulator.mutable.AuraNodeData;
+import com.gabizou.thaumicsponge.api.data.type.Aspects;
+import com.gabizou.thaumicsponge.api.data.type.AuraNodeTypes;
+import com.gabizou.thaumicsponge.api.entity.AuraNode;
+import com.gabizou.thaumicsponge.data.manipulator.immutable.ImmutableThaumicAuraNodeData;
+import com.gabizou.thaumicsponge.data.manipulator.mutable.ThaumicAuraNodeData;
+import com.gabizou.thaumicsponge.data.processor.AuraNodeDataProcessor;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.SpawnEntityEvent;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.common.data.SpongeDataManager;
 
 @Plugin(id = "thaumicsponge", name = "ThaumicSponge", version = "0.0.1-SNAPSHOT")
 public class ThaumicSponge {
@@ -37,5 +50,29 @@ public class ThaumicSponge {
         System.err.printf("Staring up ThaumicSponge!\n");
     }
 
+    @Listener
+    public void onPostInit(GameInitializationEvent event) {
+        SpongeDataManager manager = SpongeDataManager.getInstance();
+        manager.registerDataProcessorAndImpl(AuraNodeData.class, ThaumicAuraNodeData.class, ImmutableAuraNodeData.class,
+                ImmutableThaumicAuraNodeData.class, new AuraNodeDataProcessor());
+    }
+
+    @Listener
+    public void spawn(SpawnEntityEvent entityEvent) {
+        for (Entity entity : entityEvent.getEntities()) {
+            if (entity instanceof AuraNode) {
+                AuraNodeData data = entity.get(AuraNodeData.class).get();
+                System.err.printf("***** Found Aura Node *****\n");
+                System.err.printf("Aura node size: " + data.nodeSize() + "\n");
+                System.err.printf("Aura node type: " + data.nodeType().get().getId() + "\n");
+                System.err.printf("Aura node Aspect: " + data.aspect().get().getId() + "\n");
+                System.err.printf("Aura node stable: " + (data.stabilized().get() ? "true" : "false") + "\n");
+                data.set(ThaumicKeys.AURA_NODE_ASPECT, Aspects.ALIENIS);
+                data.set(ThaumicKeys.AURA_NODE_SIZE, 360);
+                data.set(ThaumicKeys.AURA_NODE_TYPE, AuraNodeTypes.TAINT);
+                entity.offer(data);
+            }
+        }
+    }
 
 }

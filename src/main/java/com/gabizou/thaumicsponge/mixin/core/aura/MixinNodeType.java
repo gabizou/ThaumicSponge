@@ -25,12 +25,15 @@
 package com.gabizou.thaumicsponge.mixin.core.aura;
 
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
-import com.gabizou.thaumicsponge.interfaces.IMixinNodeType;
+import com.gabizou.thaumicsponge.mixin.interfaces.IMixinNodeType;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import thaumcraft.common.lib.aura.NodeType;
 
 @Mixin(NodeType.class)
 public abstract class MixinNodeType implements AuraNodeType, IMixinNodeType {
+
+    @Shadow(remap = false) int id;
 
     private String nodeType;
 
@@ -42,6 +45,11 @@ public abstract class MixinNodeType implements AuraNodeType, IMixinNodeType {
     @Override
     public String getName() {
         return this.nodeType;
+    }
+
+    @Override
+    public int getNodeType() {
+        return this.id;
     }
 
     @Override
