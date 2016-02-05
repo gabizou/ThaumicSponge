@@ -24,7 +24,7 @@
  */
 package com.gabizou.thaumicsponge.mixin.core.aspect;
 
-import com.gabizou.thaumicsponge.api.Aspect;
+import com.gabizou.thaumicsponge.api.data.type.Aspect;
 import com.gabizou.thaumicsponge.registry.AspectRegistryModule;
 import com.google.common.collect.ImmutableList;
 import org.spongepowered.asm.mixin.Mixin;

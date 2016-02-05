@@ -105,6 +105,11 @@ license {
     include '**/*.java'
 }
 
+// ForgeGradle 2 fails to apply transformer rules for classes it doesn't know of by default
+// We use the access transformer to make the catalogs in the API accessible
+deobfMcMCP { failOnAtError = false }
+deobfMcSRG { failOnAtError = false }
+
 if (JavaVersion.current().isJava8Compatible() || JavaVersion.current().isJava9Compatible()) {
     tasks.withType(Javadoc) {
         // disable the crazy super-strict doclint tool in Java 8
@@ -134,13 +139,8 @@ jar {
 }
 
 shadowJar {
-
+    duplicatesStrategy= 'EXCLUDE'
     dependencies {
-        // SpongeCommon and Mixin
         include project('ThaumicSpongeAPI')
-        exclude dependency('org.spongepowered:mixin')
-        exclude dependency('org.spongepowered:spongeapi')
-        exclude dependency('org.spongepowered:spongeforge')
-        exclude dependency('47135879:Thaumcraft')
     }
 }

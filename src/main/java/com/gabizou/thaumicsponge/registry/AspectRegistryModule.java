@@ -27,15 +27,14 @@ package com.gabizou.thaumicsponge.registry;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gabizou.thaumicsponge.ReflectionUtil;
-import com.gabizou.thaumicsponge.api.Aspect;
-import com.gabizou.thaumicsponge.api.Aspects;
+import com.gabizou.thaumicsponge.api.data.type.Aspect;
+import com.gabizou.thaumicsponge.api.data.type.Aspects;
 import com.google.common.collect.ImmutableSet;
 import org.spongepowered.api.registry.util.CustomCatalogRegistration;
 import org.spongepowered.api.registry.util.RegisterCatalog;
 import org.spongepowered.common.registry.SpongeAdditionalCatalogRegistryModule;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;

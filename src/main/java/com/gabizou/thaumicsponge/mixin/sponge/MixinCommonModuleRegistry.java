@@ -24,7 +24,7 @@
  */
 package com.gabizou.thaumicsponge.mixin.sponge;
 
-import com.gabizou.thaumicsponge.api.Aspect;
+import com.gabizou.thaumicsponge.api.data.type.Aspect;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
 import com.gabizou.thaumicsponge.registry.AspectRegistryModule;
 import com.gabizou.thaumicsponge.registry.NodeTypeRegistryModule;

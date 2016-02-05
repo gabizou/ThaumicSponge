@@ -27,8 +27,6 @@ package com.gabizou.thaumicsponge.registry;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gabizou.thaumicsponge.ReflectionUtil;
-import com.gabizou.thaumicsponge.api.Aspect;
-import com.gabizou.thaumicsponge.api.Aspects;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeTypes;
 import com.gabizou.thaumicsponge.interfaces.IMixinNodeType;
