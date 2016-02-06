@@ -4,6 +4,7 @@ import com.gabizou.thaumicsponge.api.data.ThaumicKeys;
 import com.gabizou.thaumicsponge.api.data.manipulator.immutable.ImmutableAuraNodeData;
 import com.gabizou.thaumicsponge.api.data.manipulator.mutable.AuraNodeData;
 import com.gabizou.thaumicsponge.api.data.type.Aspect;
+import com.gabizou.thaumicsponge.api.data.type.Aspects;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeType;
 import com.gabizou.thaumicsponge.data.manipulator.mutable.ThaumicAuraNodeData;
 import com.gabizou.thaumicsponge.mixin.interfaces.IMixinAura;
@@ -47,7 +48,8 @@ public class AuraNodeDataProcessor extends AbstractMultiDataSingleTargetProcesso
     @Override
     protected Map<Key<?>, ?> getValues(EntityAuraNode dataHolder) {
         ImmutableMap.Builder<Key<?>, Object> builder = ImmutableMap.builder();
-        builder.put(ThaumicKeys.AURA_NODE_ASPECT, dataHolder.getAspect());
+        thaumcraft.api.aspects.Aspect aspect = dataHolder.getAspect();
+        builder.put(ThaumicKeys.AURA_NODE_ASPECT, aspect == null ? Aspects.AER : aspect);
         builder.put(ThaumicKeys.AURA_NODE_IS_STABLE, ((IMixinAura) dataHolder).isStable());
         builder.put(ThaumicKeys.AURA_NODE_SIZE, dataHolder.getNodeSize());
         builder.put(ThaumicKeys.AURA_NODE_TYPE, NodeType.nodeTypes[dataHolder.getNodeType()]);

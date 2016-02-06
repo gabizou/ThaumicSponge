@@ -7,6 +7,8 @@
     "mixins": [
         "aspect.MixinAspect",
         "aura.MixinNodeType",
+        "config.MixinConfig",
+        "config.MixinConfigEntities",
         "entity.MixinEntityAura",
         "entity.MixinIEldritchMob",
         "entity.MixinITaintedMob"

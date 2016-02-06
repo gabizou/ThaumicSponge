@@ -27,23 +27,49 @@ package com.gabizou.thaumicsponge;
 import com.gabizou.thaumicsponge.api.data.ThaumicKeys;
 import com.gabizou.thaumicsponge.api.data.manipulator.immutable.ImmutableAuraNodeData;
 import com.gabizou.thaumicsponge.api.data.manipulator.mutable.AuraNodeData;
+import com.gabizou.thaumicsponge.api.data.type.Aspect;
 import com.gabizou.thaumicsponge.api.data.type.Aspects;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeTypes;
 import com.gabizou.thaumicsponge.api.entity.AuraNode;
+import com.gabizou.thaumicsponge.api.entity.ThaumicEntityTypes;
 import com.gabizou.thaumicsponge.data.manipulator.immutable.ImmutableThaumicAuraNodeData;
 import com.gabizou.thaumicsponge.data.manipulator.mutable.ThaumicAuraNodeData;
 import com.gabizou.thaumicsponge.data.processor.AuraNodeDataProcessor;
+import com.google.common.collect.ImmutableList;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.SpawnEntityEvent;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.Tuple;
+import org.spongepowered.api.world.World;
 import org.spongepowered.common.data.SpongeDataManager;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(id = "thaumicsponge", name = "ThaumicSponge", version = "0.0.1-SNAPSHOT")
 public class ThaumicSponge {
 
+    private final Map<UUID, UUID> auraMap = new ConcurrentHashMap<>();
+
+
+    private static final Random RANDOM = new Random();
 
     @Listener
     public void onInit(GamePreInitializationEvent event) {
@@ -55,24 +81,50 @@ public class ThaumicSponge {
         SpongeDataManager manager = SpongeDataManager.getInstance();
         manager.registerDataProcessorAndImpl(AuraNodeData.class, ThaumicAuraNodeData.class, ImmutableAuraNodeData.class,
                 ImmutableThaumicAuraNodeData.class, new AuraNodeDataProcessor());
+        CommandManager commandManager = Sponge.getCommandManager();
+        CommandSpec discoAuraCmd = CommandSpec.builder()
+                .arguments(GenericArguments.none())
+                .description(Text.of("Creates a new Aura node and turns it into a disco ball!"))
+                .executor((executor, args) -> {
+                    if (executor instanceof Player) {
+                        Entity auraNode = ((Player) executor).getLocation().getExtent().createEntity(ThaumicEntityTypes.AURA_NODE, ((Player) executor).getLocation().getPosition()).get();
+                        AuraNodeData nodeData = new ThaumicAuraNodeData(50, Aspects.AER, false, AuraNodeTypes.NORMAL);
+                        auraNode.offer(nodeData);
+
+                        auraNode.getWorld().spawnEntity(auraNode, Cause.of(NamedCause.source(this)));
+                        this.auraMap.put(auraNode.getWorld().getUniqueId(), auraNode.getUniqueId());
+                        return CommandResult.success();
+                    }
+                    return CommandResult.empty();
+                })
+                .build();
+        commandManager.register(this, discoAuraCmd, "disco");
     }
 
     @Listener
-    public void spawn(SpawnEntityEvent entityEvent) {
-        for (Entity entity : entityEvent.getEntities()) {
-            if (entity instanceof AuraNode) {
-                AuraNodeData data = entity.get(AuraNodeData.class).get();
-                System.err.printf("***** Found Aura Node *****\n");
-                System.err.printf("Aura node size: " + data.nodeSize() + "\n");
-                System.err.printf("Aura node type: " + data.nodeType().get().getId() + "\n");
-                System.err.printf("Aura node Aspect: " + data.aspect().get().getId() + "\n");
-                System.err.printf("Aura node stable: " + (data.stabilized().get() ? "true" : "false") + "\n");
-                data.set(ThaumicKeys.AURA_NODE_ASPECT, Aspects.ALIENIS);
-                data.set(ThaumicKeys.AURA_NODE_SIZE, 360);
-                data.set(ThaumicKeys.AURA_NODE_TYPE, AuraNodeTypes.TAINT);
-                entity.offer(data);
-            }
-        }
+    public void onServerSTarted(GameStartedServerEvent event) {
+        Task.builder()
+                .delay(5, TimeUnit.SECONDS)
+                .interval(1, TimeUnit.SECONDS)
+                .execute(() -> {
+                    // DISCO DISCO TIME
+                    ImmutableList<Aspect> aspects = ImmutableList.copyOf(Sponge.getRegistry().getAllOf(Aspect.class));
+                    for (Map.Entry<UUID, UUID> entry : this.auraMap.entrySet()) {
+                        Optional<World> world = Sponge.getServer().getWorld(entry.getKey());
+                        world.ifPresent(spongeWorld -> {
+                            Optional<Entity> aura = spongeWorld.getEntity(entry.getValue());
+                            aura.ifPresent(auraNode -> {
+                                AuraNodeData nodeData = ((AuraNode) auraNode).auraNodeData();
+                                Aspect value = aspects.get(RANDOM.nextInt(aspects.size()));
+                                nodeData.set(ThaumicKeys.AURA_NODE_ASPECT, value);
+                                nodeData.set(ThaumicKeys.AURA_NODE_SIZE, RANDOM.nextInt(400));
+                                auraNode.offer(nodeData);
+                            });
+                        });
+                    }
+
+                })
+                .submit(this);
     }
 
 }
