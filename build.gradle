@@ -116,11 +116,17 @@ license {
     include '**/*.java'
 }
 
+jar {
+    destinationDir = temporaryDir
+    classifier = "mod"
+}
+
 shadowJar {
     dependencies {
         include project(":ThaumicSpongeAPI")
     }
     exclude 'dummyThing'
+    classifier = ""
 }
 
 artifacts {
