@@ -12,7 +12,7 @@ import thaumcraft.common.config.ConfigEntities;
 @Mixin(ConfigEntities.class)
 public class MixinConfigEntities {
 
-    @Inject(method = "init", at = @At("RETURN"))
+    @Inject(method = "init", at = @At("RETURN"), remap = false)
     private static void onInitEntities(CallbackInfo callbackInfo) {
         EntityTypeRegistryModule instance = EntityTypeRegistryModule.getInstance();
         registerEntityType(instance, "AURA_NODE", "auranode");
