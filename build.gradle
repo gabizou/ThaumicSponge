@@ -23,7 +23,7 @@ buildscript {
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.0'
-        classpath 'org.spongepowered:mixingradle:0.2-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
         classpath 'org.spongepowered:spongegradle:0.3-SNAPSHOT'
     }
 }
@@ -42,6 +42,9 @@ targetCompatibility = '1.8'
 archivesBaseName = project.name.toLowerCase()
 version = "${project.minecraftVersion}-${project.forgeVersion}-r${project.apiVersion.split("-")[0]}"
 
+configurations {
+    mixins
+}
 
 sourceSets {
     main {
@@ -66,7 +69,7 @@ repositories {
     }
     maven {
         name 'Forge repo'
-        url 'http://files.minecraftforge.com/maven'
+        url 'http://files.minecraftforge.net/maven'
     }
     maven {
         name 'Sponge maven repo'
@@ -84,13 +87,18 @@ repositories {
 
 dependencies {
     compile project('ThaumicSpongeAPI')
-    compile('org.spongepowered:mixin:0.4.16-SNAPSHOT') {
+    compile('org.spongepowered:mixin:0.5.2-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
     compile 'org.spongepowered:spongeapi:3.1.0-SNAPSHOT'
-    compile "org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev"
-    compile "47135879:Thaumcraft:1.8.9-5.1.6:deobf"
+    compile 'org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev'
+    compile '47135879:Thaumcraft:1.8.9-5.1.6:deobf'
+    mixins 'org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev'
+}
+
+mixin {
+    importConfig 'mixins'
 }
 
 idea {
@@ -112,8 +120,12 @@ shadowJar {
     dependencies {
         include project(":ThaumicSpongeAPI")
     }
+    exclude 'dummyThing'
 }
 
+artifacts {
+    archives shadowJar
+}
 
 // ForgeGradle 2 fails to apply transformer rules for classes it doesn't know of by default
 // We use the access transformer to make the catalogs in the API accessible
