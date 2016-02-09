@@ -22,12 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.mixin.interfaces;
+package com.gabizou.thaumicsponge.data.manipulator.mutable.entity;
 
-public interface IMixinAura {
+import com.gabizou.thaumicsponge.api.data.ThaumicKeys;
+import com.gabizou.thaumicsponge.api.data.manipulator.immutable.entity.ImmutableWarpData;
+import com.gabizou.thaumicsponge.api.data.manipulator.mutable.entity.WarpData;
+import com.gabizou.thaumicsponge.api.data.type.WarpType;
+import com.gabizou.thaumicsponge.data.manipulator.immutable.entity.ImmutableThaumicWarpData;
+import org.spongepowered.api.data.value.mutable.MapValue;
+import org.spongepowered.common.data.manipulator.mutable.common.collection.AbstractSingleMapData;
 
-    boolean isStable();
+import java.util.HashMap;
+import java.util.Map;
 
-    void setStabilized(boolean stabilized);
+public class ThaumicWarpData extends AbstractSingleMapData<WarpType, Integer, WarpData, ImmutableWarpData> implements WarpData {
 
+    public ThaumicWarpData() {
+        this(new HashMap<>(3));
+    }
+
+    public ThaumicWarpData(Map<WarpType, Integer> value) {
+        super(WarpData.class, value, ThaumicKeys.PLAYER_WARP, ImmutableThaumicWarpData.class);
+    }
+
+    @Override
+    public int compareTo(WarpData o) {
+        return 0;
+    }
+
+    @Override
+    public MapValue<WarpType, Integer> warp() {
+        return getValueGetter();
+    }
 }

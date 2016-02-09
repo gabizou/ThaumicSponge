@@ -26,15 +26,20 @@ package com.gabizou.thaumicsponge;
 
 import com.gabizou.thaumicsponge.api.data.ThaumicKeys;
 import com.gabizou.thaumicsponge.api.data.manipulator.immutable.ImmutableAuraNodeData;
+import com.gabizou.thaumicsponge.api.data.manipulator.immutable.entity.ImmutableWarpData;
 import com.gabizou.thaumicsponge.api.data.manipulator.mutable.AuraNodeData;
+import com.gabizou.thaumicsponge.api.data.manipulator.mutable.entity.WarpData;
 import com.gabizou.thaumicsponge.api.data.type.Aspect;
 import com.gabizou.thaumicsponge.api.data.type.Aspects;
 import com.gabizou.thaumicsponge.api.data.type.AuraNodeTypes;
 import com.gabizou.thaumicsponge.api.entity.AuraNode;
 import com.gabizou.thaumicsponge.api.entity.ThaumicEntityTypes;
 import com.gabizou.thaumicsponge.data.manipulator.immutable.ImmutableThaumicAuraNodeData;
+import com.gabizou.thaumicsponge.data.manipulator.immutable.entity.ImmutableThaumicWarpData;
 import com.gabizou.thaumicsponge.data.manipulator.mutable.ThaumicAuraNodeData;
+import com.gabizou.thaumicsponge.data.manipulator.mutable.entity.ThaumicWarpData;
 import com.gabizou.thaumicsponge.data.processor.AuraNodeDataProcessor;
+import com.gabizou.thaumicsponge.data.processor.entity.PlayerWarpDataProcessor;
 import com.google.common.collect.ImmutableList;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
@@ -46,13 +51,16 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
+import org.spongepowered.api.event.cause.entity.damage.DamageType;
+import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
+import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.util.Tuple;
 import org.spongepowered.api.world.World;
 import org.spongepowered.common.data.SpongeDataManager;
 
@@ -64,7 +72,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Plugin(id = "thaumicsponge", name = "ThaumicSponge", version = "0.0.1-SNAPSHOT")
-public class ThaumicSponge {
+public class ThaumicSpongeMod {
 
     private final Map<UUID, UUID> auraMap = new ConcurrentHashMap<>();
 
@@ -72,15 +80,12 @@ public class ThaumicSponge {
     private static final Random RANDOM = new Random();
 
     @Listener
-    public void onInit(GamePreInitializationEvent event) {
-        System.err.printf("Staring up ThaumicSponge!\n");
-    }
-
-    @Listener
-    public void onPostInit(GameInitializationEvent event) {
+    public void onInitCore(GameInitializationEvent event) {
         SpongeDataManager manager = SpongeDataManager.getInstance();
         manager.registerDataProcessorAndImpl(AuraNodeData.class, ThaumicAuraNodeData.class, ImmutableAuraNodeData.class,
                 ImmutableThaumicAuraNodeData.class, new AuraNodeDataProcessor());
+        manager.registerDataProcessorAndImpl(WarpData.class, ThaumicWarpData.class, ImmutableWarpData.class, ImmutableThaumicWarpData.class,
+                new PlayerWarpDataProcessor());
         CommandManager commandManager = Sponge.getCommandManager();
         CommandSpec discoAuraCmd = CommandSpec.builder()
                 .arguments(GenericArguments.none())
@@ -106,6 +111,7 @@ public class ThaumicSponge {
         Task.builder()
                 .delay(5, TimeUnit.SECONDS)
                 .interval(1, TimeUnit.SECONDS)
+                .name("Disco Changer")
                 .execute(() -> {
                     // DISCO DISCO TIME
                     ImmutableList<Aspect> aspects = ImmutableList.copyOf(Sponge.getRegistry().getAllOf(Aspect.class));

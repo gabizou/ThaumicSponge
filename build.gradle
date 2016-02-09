@@ -92,9 +92,9 @@ dependencies {
         exclude module: 'guava'
     }
     compile 'org.spongepowered:spongeapi:3.1.0-SNAPSHOT'
-    compile 'org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev'
+    compile 'org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1143:dev'
     compile '47135879:Thaumcraft:1.8.9-5.1.6:deobf'
-    mixins 'org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1138:dev'
+    mixins 'org.spongepowered:spongeforge:1.8.9-1732-3.1.0-BETA-1143:dev'
 }
 
 mixin {
@@ -154,6 +154,7 @@ compileJava {
 }
 
 jar {
+    classifier = "raw"
     manifest {
         attributes(
                 'Built-By': System.properties['user.name'],
@@ -161,6 +162,10 @@ jar {
                 'Implementation-Title': project.name,
                 'Implementation-Version': version,
                 'Implementation-Vendor': url,
+                'FMLCorePlugin': 'com.gabizou.thaumicsponge.ThaumicSpongeCoreMod',
+                'ForceLoadAsMod': 'true',
+                'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'TweakOrder': 0,
                 'FMLAT': 'thaumicsponge_at.cfg'
         )
     }

@@ -76,7 +76,7 @@ public class ThaumicSpongeCoreMod implements IFMLLoadingPlugin {
 
     @Override
     public String getAccessTransformerClass() {
-        return null;
+        return "com.gabizou.thaumicsponge.ThaumicAccessTransformer";
     }
 
 }

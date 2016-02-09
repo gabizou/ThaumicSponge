@@ -22,12 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.mixin.interfaces;
+package com.gabizou.thaumicsponge;
 
-public interface IMixinAura {
+import net.minecraftforge.fml.common.asm.transformers.AccessTransformer;
 
-    boolean isStable();
+import java.io.IOException;
 
-    void setStabilized(boolean stabilized);
+public class ThaumicAccessTransformer extends AccessTransformer {
 
+    public ThaumicAccessTransformer() throws IOException {
+        super("thaumicsponge_at.cfg");
+    }
 }

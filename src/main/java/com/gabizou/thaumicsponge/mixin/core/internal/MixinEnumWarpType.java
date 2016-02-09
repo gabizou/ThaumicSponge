@@ -22,12 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.gabizou.thaumicsponge.mixin.interfaces;
+package com.gabizou.thaumicsponge.mixin.core.internal;
 
-public interface IMixinAura {
+import com.gabizou.thaumicsponge.api.data.type.WarpType;
+import com.google.common.base.CaseFormat;
+import org.spongepowered.asm.mixin.Mixin;
+import thaumcraft.api.internal.EnumWarpType;
 
-    boolean isStable();
+@Mixin(EnumWarpType.class)
+public abstract class MixinEnumWarpType implements WarpType {
 
-    void setStabilized(boolean stabilized);
+    @Override
+    public String getId() {
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, ((EnumWarpType) (Object) this).name());
+    }
 
+    @Override
+    public String getName() {
+        return ((EnumWarpType) (Object) this).name();
+    }
 }
